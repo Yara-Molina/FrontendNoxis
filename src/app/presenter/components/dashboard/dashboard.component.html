@@ -1,0 +1,8 @@
+<section class="dashboard-container">
+    @for (card of dashboardData; track card.id) {
+      <app-card 
+        [title]="card.title"
+        [type]="card.type"
+      ></app-card>
+    }
+  </section>
