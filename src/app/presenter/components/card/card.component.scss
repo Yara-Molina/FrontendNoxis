@@ -1,0 +1,22 @@
+.dashboard-card {
+    margin: 16px;
+    min-height: 300px;
+  
+    .chart-container {
+      height: 250px;
+      width: 100%;
+      position: relative;
+    }
+  
+    .notification-container {
+      max-height: 250px;
+      overflow-y: auto;
+  
+      .notification {
+        padding: 8px;
+        margin: 8px 0;
+        border-radius: 4px;
+        background-color: #f5f5f5;
+      }
+    }
+  }
