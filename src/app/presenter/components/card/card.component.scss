@@ -1,0 +1,26 @@
+.dashboard-card {
+    margin: 0px;
+    height: 250px;
+    margin-top: 7px;
+
+    .chart-container {
+      position: relative;
+      height: 200px;
+      width: 100%;
+    }
+
+    .dashboard-container {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        column-gap: 0.5rem;    
+             
+    }
+    
+    .notification-container {
+      height: 300px;
+      overflow-y: auto;
+    
+    }
+}
+
+
