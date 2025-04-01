@@ -3,9 +3,9 @@ import { CardComponent } from '../../components/card/card.component';
 import { DashboardCard, CardType } from '../../../domain/interfaces/dashboard.interface';
 import { NotificationsComponent } from '../../components/notifications/notifications.component';
 import {MatCardModule} from '@angular/material/card';
-import { EnvironmentMonitoringComponent } from "../environment-monitoring/environment-monitoring.component";
-import { FirePreventionComponent } from "../fire-prevention/fire-prevention.component";
-import { GasMeasurementComponent } from "../gas-measurement/gas-measurement.component";
+import { EnvironmentMonitoringComponent } from '../../components/environment-monitoring/environment-monitoring.component';
+import { FirePreventionComponent } from '../../components/fire-prevention/fire-prevention.component';
+import { GasMeasurementComponent } from '../../components/gas-measurement/gas-measurement.component';
 
 @Component({
   selector: 'app-dashboard',
