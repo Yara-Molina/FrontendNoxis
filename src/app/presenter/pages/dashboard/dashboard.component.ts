@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { CardComponent } from '../card/card.component';
+import { CardComponent } from '../../components/card/card.component';
 import { DashboardCard, CardType } from '../../../domain/interfaces/dashboard.interface';
-import { NotificationsComponent } from '../notifications/notifications.component';
+import { NotificationsComponent } from '../../components/notifications/notifications.component';
 import {MatCardModule} from '@angular/material/card';
 
 @Component({
