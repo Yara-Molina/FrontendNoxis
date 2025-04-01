@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './presenter/components/layout/header/header.component';
 import { FooterComponent } from './presenter/components/layout/footer/footer.component';
-import { DashboardComponent } from './presenter/components/dashboard/dashboard.component';
+import { DashboardComponent } from './presenter/pages/dashboard/dashboard.component';
 
 @Component({
   selector: 'app-root',
@@ -10,7 +10,7 @@ import { DashboardComponent } from './presenter/components/dashboard/dashboard.c
   imports: [RouterOutlet,
     HeaderComponent,
     FooterComponent,
-    DashboardComponent
+    DashboardComponent,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'

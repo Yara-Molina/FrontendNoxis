@@ -1,0 +1,38 @@
+<!-- admin-card.component.html -->
+<div class="cards-grid">
+    <div class="card total-card">
+      <div class="card-content">
+        <div>
+          <h2 class="card-title">Total de Kits</h2>
+          <p class="card-value">{{ totalKits }}</p>
+        </div>
+        <div class="icon-container total-icon">
+          <img src="assets/icons/clipboard.png" alt="Total Icon" class="icon" />
+        </div>
+      </div>
+    </div>
+    
+    <div class="card active-card">
+      <div class="card-content">
+        <div>
+          <h2 class="card-title">Kits Activados</h2>
+          <p class="card-value active-value">{{ activeKits }}</p>
+        </div>
+        <div class="icon-container active-icon">
+        <img src="assets/icons/checkgreen.png" alt="Total Icon" class="icon" />
+        </div>
+      </div>
+    </div>
+    
+    <div class="card inactive-card">
+      <div class="card-content">
+        <div>
+          <h2 class="card-title">Kits Inactivos</h2>
+          <p class="card-value inactive-value">{{ inactiveKits }}</p>
+        </div>
+        <div class="icon-container inactive-icon">
+            <img src="assets\icons\checkx.png" alt="Total Icon" class="icon" />
+        </div>
+      </div>
+    </div>
+  </div>

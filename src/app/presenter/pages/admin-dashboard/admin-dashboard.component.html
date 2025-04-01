@@ -1,0 +1,64 @@
+<!-- admin-dashboard.component.html -->
+<div class="dashboard-container">
+    <div class="dashboard-content">
+      <h1 class="dashboard-title">Panel de Administración de Sensores</h1>
+      
+      <!-- Componente de tarjetas de resumen -->
+      <app-admin-card 
+        [totalKits]="totalKits" 
+        [activeKits]="activeKits" 
+        [inactiveKits]="inactiveKits">
+      </app-admin-card>
+      
+      <!-- Componente de búsqueda y filtro -->
+      <div class="search-container">
+        <app-search-bar 
+          (search)="applySearch($event)" 
+          (filter)="applyFilter($event)">
+        </app-search-bar>
+      </div>
+      
+      <!-- Tabla de kits -->
+      <div class="table-container">
+        <table class="kits-table">
+          <thead>
+            <tr>
+              <th>Clave</th>
+              <th>Cliente</th>
+              <th>Activación</th>
+              <th>Sensores</th>
+              <th>Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let kit of kits; let i = index" 
+                [ngClass]="{'row-alternate': i % 2 === 0}">
+              <td>{{ kit.clave }}</td>
+              <td class="client-name">{{ kit.cliente }}</td>
+              <td>{{ kit.activacion }}</td>
+              <td>
+                <div class="sensors-container">
+                  <span *ngFor="let sensor of kit.sensores" class="sensor-tag">
+                    {{ sensor }}
+                  </span>
+                </div>
+              </td>
+              <td>
+                <span *ngIf="kit.estado === 'Activo'" class="status-active">
+                  Activo
+                </span>
+                <span *ngIf="kit.estado === 'Inactivo'" class="status-inactive">
+                  Inactivo
+                </span>
+              </td>
+            </tr>
+            <tr *ngIf="kits.length === 0">
+              <td colspan="5" class="no-results">
+                No se encontraron kits con los criterios de búsqueda
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>

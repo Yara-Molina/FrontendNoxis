@@ -1,0 +1,119 @@
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: #e3f2fd;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.vista-principal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.contenedor-login {
+  display: flex;
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  max-width: 900px;
+  width: 100%;
+  overflow: hidden;
+}
+
+.columna-formulario {
+  padding: 40px;
+  width: 50%;
+}
+
+.titulo-sesion {
+  color: #0d47a1;
+  font-size: 28px;
+  margin-bottom: 20px;
+}
+
+.texto-label {
+  color: #1565c0;
+  font-size: 14px;
+  margin-top: 15px;
+}
+
+input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #90caf9;
+  border-radius: 5px;
+  outline: none;
+  margin-top: 5px;
+}
+
+input:focus {
+  border-color: #0d47a1;
+}
+
+.btn-entrar {
+  width: 100%;
+  padding: 12px;
+  background-color: #1976d2;
+  color: white;
+  font-size: 18px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+.btn-entrar:hover {
+  background-color: #1565c0;
+}
+
+.texto-continuar {
+  font-size: 14px;
+  color: #546e7a;
+  text-align: center;
+  margin: 20px 0;
+}
+
+.btn-google {
+  width: 100%;
+  padding: 12px;
+  background: white;
+  border: 1px solid #90caf9;
+  border-radius: 5px;
+  font-weight: bold;
+  color: #1565c0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-google img {
+  width: 20px;
+  margin-right: 10px;
+}
+
+.columna-imagen {
+  width: 50%;
+}
+
+.imagen-login {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@media (max-width: 768px) {
+  .contenedor-login {
+    flex-direction: column;
+  }
+
+  .columna-formulario, .columna-imagen {
+    width: 100%;
+  }
+}

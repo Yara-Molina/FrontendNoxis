@@ -1,0 +1,24 @@
+<div class="vista-principal">
+  <div class="contenedor-login">
+    <div class="columna-formulario">
+      <h2 class="titulo-sesion">Inicio de Sesión</h2>
+      <h4 class="texto-label">Nombre de usuario</h4>
+      <input type="text" id="email" [(ngModel)]="email" placeholder="Ingresa tu nombre de usuario" />
+      
+      <h4 class="texto-label">Contraseña</h4>
+      <input type="password" id="password" [(ngModel)]="password" placeholder="Ingresa tu contraseña" />
+      
+      <div class="error-message"></div>
+      <button (click)="login()" class="btn-entrar">Entrar</button>
+      
+      <h3 class="texto-continuar">Continuar con</h3>
+      <button class="btn-google">
+        <img class="icono-google" src="google-icon.png" alt="Google Icon" />
+        Iniciar sesión con Google (Próximamente)
+      </button>
+    </div>
+    <div class="columna-imagen">
+      <img class="imagen-login" src="assets/images/ImgLogin.jpg" alt="Imagen de inicio de sesión" />
+    </div>
+  </div>
+</div>
