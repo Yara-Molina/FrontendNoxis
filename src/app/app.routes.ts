@@ -1,9 +1,21 @@
 import { Routes } from '@angular/router';
-import { LoginComponent } from './presenter/components/login/login.component';
-
+import { LoginComponent } from './presenter/pages/login/login.component';
+import { DashboardComponent } from './presenter/pages/dashboard/dashboard.component';
+import { AdminDashboardComponent } from './presenter/pages/admin-dashboard/admin-dashboard.component';
+import { SingUpComponent } from './presenter/pages/sing-up/sing-up.component';
 
 export const routes: Routes = [
-    { path: '', component: LoginComponent },
-    { path: '**', redirectTo: 'login' }, // Redirige cualquier ruta desconocida al login (opcional)
-
-];
+    { path: 'login', component: LoginComponent },
+    { 
+      path: 'dashboard', 
+      component: DashboardComponent,
+    },
+    {
+      path: 'admin-dashboard',
+      component:AdminDashboardComponent,
+    },
+    
+    { path: '', redirectTo: 'signup', pathMatch: 'full' }, // Redirige a login por defecto
+    { path: '**', redirectTo: 'signup' }, // Ruta comodín para cualquier ruta inexistente
+    { path: 'signup', component: SingUpComponent },
+  ];

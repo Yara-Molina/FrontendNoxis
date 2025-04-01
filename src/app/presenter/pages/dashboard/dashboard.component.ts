@@ -1,11 +1,16 @@
 import { Component } from '@angular/core';
-import { CardComponent } from '../card/card.component';
+import { CardComponent } from '../../components/card/card.component';
 import { DashboardCard, CardType } from '../../../domain/interfaces/dashboard.interface';
+import { NotificationsComponent } from '../../components/notifications/notifications.component';
+import {MatCardModule} from '@angular/material/card';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CardComponent],
+  imports: [CardComponent,
+    NotificationsComponent,
+    MatCardModule
+  ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
 })
