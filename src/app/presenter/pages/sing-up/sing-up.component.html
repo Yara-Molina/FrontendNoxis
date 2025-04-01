@@ -1,0 +1,28 @@
+<form (ngSubmit)="register()">
+    <div class="VistaPrincipal">
+      <div class="AmbasColumnas">
+        <div id="gas">
+          <img id="gasImg" src="assets/images/gases.jpg" alt="Imagen de registro" />
+        </div>
+  
+        <div id="ColumnaPrincipal">
+        <h2 id="tituloSesion">Registro de Usuario</h2>
+          <h4 id="inicioText">Correo electrónico</h4>
+          <input type="email" id="email" [(ngModel)]="email" placeholder="Ingresa tu correo" name="email" />
+  
+          <h4 id="passwordText">Contraseña</h4>
+          <input type="password" id="password" [(ngModel)]="password" placeholder="Ingresa tu contraseña" name="password" autocomplete="new-password" />
+  
+          <h4 id="passwordTextConfirm">Confirmar contraseña</h4>
+          <input type="password" id="passwordConfirm" [(ngModel)]="passwordConfirm" placeholder="Repite tu contraseña" name="passwordConfirm" autocomplete="new-password" />
+  
+          <div class="error-message"></div>
+          <button type="submit" id="entrarbtn">Registrarse</button>
+          <h3 id="pregunta">
+            ¿Ya tienes una cuenta?
+            <button type="button" (click)="goToLogin()" id="iniciarSesion">Iniciar Sesion</button>
+          </h3>
+        </div>
+      </div>
+    </div>
+  </form>

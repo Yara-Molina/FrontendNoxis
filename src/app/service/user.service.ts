@@ -22,6 +22,19 @@ export class UserService {
     return typeof window !== 'undefined';
   }
 
+   // Método para registrar usuario
+   register(userData: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/users/`, userData).pipe(
+      tap((response: any) => {
+        this.saveToken(response.token);
+      }),
+      catchError((error) => {
+        console.error('Error durante el registro:', error);
+        return throwError(error);
+      })
+    );
+  }
+
   // Método para logear usuario
   login(email: string, password: string): Observable<any> {
     return this.http.post(`${this.apiUrl}/auth/token`, { email, password }).pipe(
