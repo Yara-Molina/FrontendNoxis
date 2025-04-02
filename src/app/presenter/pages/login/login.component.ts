@@ -20,15 +20,10 @@ export class LoginComponent {
   login() {
     this.userService.login(this.email, this.password).subscribe(
       (response) => {
-        console.log('Inicio de sesión exitoso:', response);
-        // Dependiendo del rol del usuario (tipo_usuario), redirigir a la página correspondiente
-        switch (response.tipo_usuario) {
-          case 'Cliente':
-          case 'Admin':
-            this.router.navigate(['/homeAdmin']);
-            break;
-          default:
-            console.error('Rol de usuario desconocido');
+        console.log('Inicio de sesión exitoso:', response);  
+        // Si el email contiene "@admin", redirige a homeAdmin
+        if (this.email.includes('@admin')) {
+          this.router.navigate(['/homeAdmin']);
         }
       },
       (error) => {
