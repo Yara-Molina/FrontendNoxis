@@ -1,7 +1,7 @@
 import { Component, NgZone, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BaseChartComponent } from '../base/base.component';
-import { WebsocketService } from '../../../service/websocket.service';
+import { WebSocketService } from '../../../service/websocket.service';
 import { ChartType } from 'chart.js';
 
 @Component({
@@ -65,7 +65,7 @@ export class EnvironmentMonitoringComponent extends BaseChartComponent implement
   
   
   constructor(
-    webSocketService: WebsocketService,
+    webSocketService: WebSocketService,
     ngZone: NgZone,
     cdr: ChangeDetectorRef
   ) {

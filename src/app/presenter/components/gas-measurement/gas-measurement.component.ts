@@ -1,7 +1,7 @@
 import { Component, NgZone, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BaseChartComponent } from '../base/base.component';
-import { WebsocketService } from '../../../service/websocket.service';
+import { WebSocketService } from '../../../service/websocket.service';
 import { ChartType } from 'chart.js';
 
 @Component({
@@ -60,11 +60,11 @@ export class GasMeasurementComponent extends BaseChartComponent {
   protected override sensorName = 'MQ-7';
 
   constructor(
-    webSocketService: WebsocketService,
+    webSocketService: WebSocketService,
     ngZone: NgZone,
     cdr: ChangeDetectorRef
   ) {
     super(webSocketService, ngZone, cdr);
-    console.log('☁️ GasMeasurementComponent inicializado');
+    console.log('☁ GasMeasurementComponent inicializado');
   }
 }

@@ -11,21 +11,20 @@ Chart.register(...registerables);
 })
 export abstract class BaseChartComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('chartCanvas') chartCanvas!: ElementRef;
-  
+
   protected abstract chartType: ChartType;
   protected abstract sensorLabels: string[];
   protected abstract chartTitle: string;
   protected abstract sensorsToTrack: string[];
   protected abstract backgroundColor: string[];
   protected abstract yAxisLabel: string;
-  
-  
+
   protected sensorName: string = '';
-  
+
   protected chart: Chart | null = null;
   protected isConnected = false;
   protected chartData: ChartData | null = null;
-  
+
   private messageSubscription: Subscription | null = null;
   private connectionSubscription: Subscription | null = null;
   private chartInitTimer: any = null;
@@ -38,13 +37,13 @@ export abstract class BaseChartComponent implements OnInit, OnDestroy, AfterView
 
   ngOnInit(): void {
     const sensorToUse = this.sensorName || (this.sensorsToTrack && this.sensorsToTrack.length > 0 ? this.sensorsToTrack[0] : 'default');
-    
-    console.log("🔄 Iniciando conexión WebSocket para:", sensorToUse);
-    
+
+    console.log(`🔄 Iniciando conexión WebSocket para: ${sensorToUse}`);
+
     this.connectionSubscription = this.webSocketService.connect(sensorToUse).subscribe(connected => {
       this.isConnected = connected;
-      console.log("🔌 Estado de conexión WebSocket:", connected);
-      
+      console.log(`🔌 Estado de conexión WebSocket: ${connected}`);
+
       if (connected) {
         this.subscribeToMessages();
         // No inicializar la gráfica aquí, esperamos a ngAfterViewInit
@@ -54,11 +53,11 @@ export abstract class BaseChartComponent implements OnInit, OnDestroy, AfterView
 
   ngAfterViewInit(): void {
     console.log("🎨 Verificando canvas...", this.chartCanvas);
-    
+
     // Esperar un poco para que Angular termine de renderizar la vista
     this.chartInitTimer = setTimeout(() => {
       if (this.chartCanvas) {
-        console.log("🖼️ Canvas está disponible, inicializando gráfica...");
+        console.log("🖼 Canvas está disponible, inicializando gráfica...");
         this.initChart();
       } else {
         console.error("❌ Error: chartCanvas no está disponible después del timeout");
@@ -85,7 +84,7 @@ export abstract class BaseChartComponent implements OnInit, OnDestroy, AfterView
 
   protected initChart(): void {
     console.log("📊 Intentando inicializar gráfica...");
-    
+
     if (!this.chartCanvas) {
       console.error('Chart canvas not found');
       return;
@@ -93,7 +92,7 @@ export abstract class BaseChartComponent implements OnInit, OnDestroy, AfterView
 
     const canvas = this.chartCanvas.nativeElement;
     console.log("Canvas element:", canvas);
-    
+
     if (!canvas) {
       console.error('Canvas element is null or undefined');
       return;
@@ -125,13 +124,13 @@ export abstract class BaseChartComponent implements OnInit, OnDestroy, AfterView
         if (this.chart) {
           this.chart.destroy();
         }
-        
+
         this.chart = new Chart(ctx, {
           type: this.chartType,
           data: this.chartData!,
           options: this.getChartOptions()
         });
-        
+
         console.log("✅ Gráfica inicializada correctamente");
       });
     } catch (error) {
@@ -179,12 +178,11 @@ export abstract class BaseChartComponent implements OnInit, OnDestroy, AfterView
           }
         }
       },
-      animation: {// Hace la animación más rápida
+      animation: { // Hace la animación más rápida
         easing: "easeInOutQuad"
       }
     };
   }
-
 
   protected subscribeToMessages(): void {
     console.log("🔄 Suscribiéndose a mensajes WebSocket");
@@ -195,46 +193,41 @@ export abstract class BaseChartComponent implements OnInit, OnDestroy, AfterView
       }
     });
   }
-  
+
   protected updateChartData(message: any): void {
     if (!this.chart || !message) {
-      console.log("No se puede actualizar: chart o message no disponibles");
+      console.log("⚠ No se puede actualizar: chart o message no disponibles");
       return;
     }
-  
-    console.log("Intentando actualizar gráfica con:", message);
-  
+
+    console.log("📊 Intentando actualizar gráfica con:", message);
+
     this.ngZone.run(() => {
       if (this.chart?.data?.datasets?.[0]) {
         const dataset = this.chart.data.datasets[0];
-  
+
+        // Actualizar solo los sensores presentes en el mensaje
         this.sensorsToTrack.forEach((sensor, index) => {
           if (message[sensor] !== undefined) {
-            dataset.data[index] = message[sensor]; 
-            console.log(`Sensor ${sensor} actualizado con: ${message[sensor]}`);
+            dataset.data[index] = message[sensor]; // Actualiza solo el sensor que llegó
+            console.log(`📡 Sensor ${sensor} actualizado con: ${message[sensor]}`);
           }
         });
-  
+
+        // Agregar una nueva etiqueta de tiempo
         const currentTime = new Date().toLocaleTimeString();
-  
         if (this.chart.data.labels) {
           this.chart.data.labels.push(currentTime);
-  
-  
-          if (this.chart.data.labels.length > 10) { 
-            this.chart.data.labels.shift(); // Elimina el primer dato para mantener un máximo de 10 puntos
-            dataset.data.shift();
+          if (this.chart.data.labels.length > 10) {
+            this.chart.data.labels.shift();
           }
         }
-  
+
         this.chart.update();
-        console.log("Gráfica actualizada con nuevos datos");
+        console.log("✅ Gráfica actualizada con nuevos datos");
       } else {
-        console.error("Error: No se pudo actualizar la gráfica, estructura incompleta");
+        console.error("❌ Error: No se pudo actualizar la gráfica, estructura incompleta");
       }
     });
   }
-  
-  
-  
 }
