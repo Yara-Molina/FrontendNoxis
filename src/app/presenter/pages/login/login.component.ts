@@ -23,7 +23,7 @@ export class LoginComponent {
         console.log('Inicio de sesión exitoso:', response);  
         // Si el email contiene "@admin", redirige a homeAdmin
         if (this.email.includes('@admin')) {
-          this.router.navigate(['/homeAdmin']);
+          this.router.navigate(['/admin-dashboard']);
         }
       },
       (error) => {
