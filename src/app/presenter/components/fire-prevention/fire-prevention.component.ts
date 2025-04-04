@@ -13,16 +13,38 @@ import { MatCardModule } from '@angular/material/card';
   styleUrl: './fire-prevention.component.scss'
 })
 export class FirePreventionComponent implements AfterViewInit, OnInit, OnDestroy {
-  @ViewChild('chartCanvas') chartCanvas?: ElementRef;
+  @ViewChild('chartCanvas', { static: false }) chartCanvas?: ElementRef<HTMLCanvasElement>;
   private chart?: Chart;
   private sensorSubscription?: Subscription;
+
+  // Estructura para almacenar datos de sensores
+  private sensorData: { [key: string]: number } = {
+    'Metano MQ-4': 0,
+    'Gas Natural MQ-5': 0
+  };
 
   constructor(private webSocketService: WebSocketService) {}
 
   ngOnInit() {
-    this.sensorSubscription = this.webSocketService.getMessages().subscribe(data => {
-      if (data.sensor === 'Metano MQ-4' || data.sensor === 'Gas Natural MQ-5') {
-        this.updateChartData(data.sensor, data.value);
+    console.log('Fire Prevention Component Initialized');
+
+    this.sensorSubscription = this.webSocketService.getMessages().subscribe({
+      next: (data) => {
+        const { name, data: value } = data;
+
+        switch (name) {
+          case 'Metano MQ-4':
+          case 'Gas Natural MQ-5':
+            this.updateChartData(name, Number(value));
+            break;
+
+          default:
+            // Ignora sensores no relacionados con fuego
+            break;
+        }
+      },
+      error: (err) => {
+        console.error('Error en WebSocket:', err);
       }
     });
   }
@@ -34,10 +56,17 @@ export class FirePreventionComponent implements AfterViewInit, OnInit, OnDestroy
   }
 
   private createChart() {
-    if (!this.chartCanvas) return;
+    if (this.chart) {
+      this.chart.destroy(); // Destruir el gráfico existente
+    }
+
+    if (!this.chartCanvas?.nativeElement) return;
 
     const ctx = this.chartCanvas.nativeElement.getContext('2d');
-    if (!ctx) return;
+    if (!ctx) {
+      console.error('No se pudo obtener el contexto del canvas');
+      return;
+    }
 
     this.chart = new Chart(ctx, {
       type: 'bar',
@@ -45,7 +74,10 @@ export class FirePreventionComponent implements AfterViewInit, OnInit, OnDestroy
         labels: ['Metano MQ-4', 'Gas Natural MQ-5'],
         datasets: [{
           label: 'Concentración de gas',
-          data: [0, 0], 
+          data: [
+            this.sensorData['Metano MQ-4'],
+            this.sensorData['Gas Natural MQ-5']
+          ],
           backgroundColor: ['rgba(255, 99, 132, 0.5)', 'rgba(54, 162, 235, 0.5)']
         }]
       },
@@ -53,7 +85,9 @@ export class FirePreventionComponent implements AfterViewInit, OnInit, OnDestroy
         responsive: true,
         maintainAspectRatio: false,
         scales: {
-          y: { beginAtZero: true }
+          y: {
+            beginAtZero: true
+          }
         }
       }
     });
@@ -62,11 +96,20 @@ export class FirePreventionComponent implements AfterViewInit, OnInit, OnDestroy
   private updateChartData(sensor: string, value: number) {
     if (!this.chart) return;
 
-    const index = this.chart.data.labels?.indexOf(sensor);
-    if (index !== undefined && index !== -1) {
-      this.chart.data.datasets[0].data[index] = value;
-      this.chart.update();
+    console.log(`Actualizando datos del sensor ${sensor} con valor ${value}`);
+
+    this.sensorData[sensor] = value;
+
+    const metanoValue = this.sensorData['Metano MQ-4'];
+    const gasValue = this.sensorData['Gas Natural MQ-5'];
+
+    if (typeof metanoValue !== 'number' || typeof gasValue !== 'number') {
+      console.error('Datos de sensores inválidos:', this.sensorData);
+      return;
     }
+
+    this.chart.data.datasets[0].data = [metanoValue, gasValue];
+    this.chart.update();
   }
 
   ngOnDestroy() {
