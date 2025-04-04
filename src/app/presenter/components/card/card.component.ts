@@ -1,53 +1,44 @@
-import { Component, Input, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
-import { MatCardModule } from '@angular/material/card';
+import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Chart, ChartConfiguration } from 'chart.js/auto';
-
 
 @Component({
   selector: 'app-card',
   standalone: true,
-  imports: [MatCardModule, CommonModule],
-  templateUrl: './card.component.html',
-  styleUrl: './card.component.scss'
-})
-export class CardComponent implements AfterViewInit {
-  @Input() title: string = '';
-  @Input() type: 'chart' | 'notification' = 'chart';
-  @ViewChild('chartCanvas') chartCanvas?: ElementRef;
-
-  private chart?: Chart;
-
-  ngAfterViewInit() {
-    if (this.type === 'chart' && this.chartCanvas) {
-      this.createChart();
+  imports: [CommonModule],
+  template: `
+    <div class="custom-card">
+      <div class="custom-card-header">
+        <h2>{{ title }}</h2>
+      </div>
+      <div class="custom-card-content">
+        <ng-content></ng-content>
+      </div>
+    </div>
+  `,
+  styles: [`
+    .custom-card {
+      background-color: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+      margin-bottom: 1rem;
+      overflow: hidden;
     }
-  }
-
-  private createChart() {
-    if (!this.chartCanvas) return;
-
-    const ctx = this.chartCanvas.nativeElement.getContext('2d');
-    if (!ctx) return;
-
-    this.chart = new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: ['Sensor1', 'Sensor2', 'Sensor3'],
-        datasets: [{
-          label: 'Datos de ejemplo',
-          data: [65, 59, 80, 81, 56],
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        scales: {
-          y: {
-            beginAtZero: true
-          }
-        }
-      }
-    });
-  }
+    .custom-card-header {
+      padding: 16px;
+      background-color: #f7f9fc;
+      border-bottom: 1px solid #e0e4e8;
+    }
+    .custom-card-header h2 {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 500;
+      color: #333;
+    }
+    .custom-card-content {
+      padding: 16px;
+    }
+  `]
+})
+export class CardComponent {
+  @Input() title: string = '';
 }
