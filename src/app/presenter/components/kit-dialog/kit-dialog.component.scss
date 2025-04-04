@@ -1,0 +1,67 @@
+// Estilos para el diálogo con tema azul
+.kit-dialog-container {
+    padding: 0;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  
+  .dialog-title {
+    background-color: #1a56db; // Azul oscuro
+    color: white;
+    padding: 16px 24px;
+    margin: 0;
+    font-size: 20px;
+    font-weight: 500;
+  }
+  
+  .dialog-content {
+    padding: 24px;
+    background-color: #f0f7ff; // Azul muy claro para el fondo
+  }
+  
+  .dialog-actions {
+    padding: 8px 24px 16px;
+    margin-bottom: 0;
+    background-color: #f0f7ff;
+    border-top: 1px solid #dbeafe; // Borde sutil azul claro
+  }
+  
+  // Personalizar los botones
+  .cancel-button {
+    color: #4b5563; // Gris oscuro
+  }
+  
+  .submit-button {
+    background-color: #2563eb; // Azul primario
+    &:hover {
+      background-color: #1d4ed8; // Un poco más oscuro al pasar el mouse
+    }
+    &[disabled] {
+      background-color: rgba(37, 99, 235, 0.5); // Azul más claro cuando está deshabilitado
+    }
+  }
+  
+  // Personalizar el input
+  ::ng-deep {
+    .mat-form-field-appearance-fill .mat-form-field-flex {
+      background-color: white;
+      border-radius: 4px;
+      border: 1px solid #bfdbfe; // Borde azul claro
+    }
+    
+    .mat-form-field-appearance-fill.mat-focused .mat-form-field-flex {
+      border-color: #3b82f6; // Azul cuando está enfocado
+    }
+    
+    .mat-form-field-label {
+      color: #3b82f6 !important; // Azul para la etiqueta
+    }
+    
+    .mat-form-field-underline {
+      background-color: transparent !important;
+    }
+    
+    .mat-hint {
+      color: #6b7280; // Gris para el texto de ayuda
+    }
+  }
