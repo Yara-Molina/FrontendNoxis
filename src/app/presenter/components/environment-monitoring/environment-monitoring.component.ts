@@ -1,5 +1,6 @@
 import { Component, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
+
 import { Chart } from 'chart.js/auto'; // Esto asegura que los tipos de gráficos y plugins estén cargados
 import { WebSocketService } from '../../../service/websocket.service';
 

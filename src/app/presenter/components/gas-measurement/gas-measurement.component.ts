@@ -1,6 +1,6 @@
 import { Component, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Chart } from 'chart.js/auto';
+import { BaseChartComponent } from '../base/base.component';
 import { WebSocketService } from '../../../service/websocket.service';
 
 @Component({
