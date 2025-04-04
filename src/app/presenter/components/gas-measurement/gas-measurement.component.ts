@@ -1,74 +1,70 @@
-import { Component, AfterViewInit, ElementRef, ViewChild, OnInit, OnDestroy } from '@angular/core';
+import { Component, NgZone, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Chart } from 'chart.js/auto';
+import { BaseChartComponent } from '../base/base.component';
 import { WebSocketService } from '../../../service/websocket.service';
-import { Subscription } from 'rxjs';
+import { ChartType } from 'chart.js';
 
 @Component({
   selector: 'app-gas-measurement',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './gas-measurement.component.html',
-  styleUrl: './gas-measurement.component.scss'
+  template: `
+    <div class="chart-container">
+      <div *ngIf="isConnected; else disconnected">
+        <canvas #chartCanvas width="400" height="300"></canvas>
+      </div>
+      <ng-template #disconnected>
+        <div class="connection-error">
+          <p>No se pudo establecer conexión con los sensores de gases tóxicos.</p>
+        </div>
+      </ng-template>
+    </div>
+  `,
+  styles: [`
+    :host {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+    .chart-container {
+      height: 300px;
+      width: 100%;
+      position: relative;
+      margin: 0 auto;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+    .connection-error {
+      padding: 16px;
+      text-align: center;
+      color: #dc3545;
+      background-color: #f8d7da;
+      border-radius: 4px;
+    }
+  `]
 })
-export class GasMeasurementComponent implements AfterViewInit, OnInit, OnDestroy {
-  @ViewChild('chartCanvas') chartCanvas?: ElementRef;
-  private chart?: Chart;
-  private sensorSubscription?: Subscription;
+export class GasMeasurementComponent extends BaseChartComponent {
+  protected override chartType: ChartType = 'bar';
+  protected override sensorLabels = ['Carbono MQ-7', 'Carbono CJMCU-811', 'Hidrógeno MQ-136'];
+  protected override chartTitle = 'Concentración de Gases Tóxicos';
+  protected override sensorsToTrack = ['MQ-7', 'CJMCU-811', 'MQ-136', 'Carbono MQ-7', 'Carbono CJMCU-811', 'Hidrógeno MQ-136'];
+  protected override backgroundColor = [
+    'rgba(75, 192, 192, 0.5)',
+    'rgba(255, 206, 86, 0.5)',
+    'rgba(153, 102, 255, 0.5)'
+  ];
+  protected override yAxisLabel = 'Concentración (ppm)';
+  
+  // Especifica el sensor para este componente
+  protected override sensorName = 'MQ-7';
 
-  constructor(private webSocketService: WebSocketService) {}
-
-  ngOnInit() {
-    this.sensorSubscription = this.webSocketService.getMessages().subscribe(data => {
-      if (['MQ-7', 'CJMCU-811', 'MQ-136'].includes(data.sensor)) {
-        this.updateChartData(data.sensor, data.value);
-      }
-    });
-  }
-
-  ngAfterViewInit() {
-    if (this.chartCanvas) {
-      this.createChart();
-    }
-  }
-
-  private createChart() {
-    if (!this.chartCanvas) return;
-
-    const ctx = this.chartCanvas.nativeElement.getContext('2d');
-    if (!ctx) return;
-
-    this.chart = new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: ['Carbono MQ-7', 'Carbono CJMCU-811', 'Hidrogeno MQ-136'],
-        datasets: [{
-          label: 'Concentración de gases',
-          data: [0, 0, 0], 
-          backgroundColor: ['rgba(75, 192, 192, 0.5)', 'rgba(255, 206, 86, 0.5)', 'rgba(153, 102, 255, 0.5)']
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        scales: {
-          y: { beginAtZero: true }
-        }
-      }
-    });
-  }
-
-  private updateChartData(sensor: string, value: number) {
-    if (!this.chart) return;
-
-    const index = this.chart.data.labels?.indexOf(sensor);
-    if (index !== undefined && index !== -1) {
-      this.chart.data.datasets[0].data[index] = value;
-      this.chart.update();
-    }
-  }
-
-  ngOnDestroy() {
-    this.sensorSubscription?.unsubscribe();
+  constructor(
+    webSocketService: WebSocketService,
+    ngZone: NgZone,
+    cdr: ChangeDetectorRef
+  ) {
+    super(webSocketService, ngZone, cdr);
+    console.log('☁ GasMeasurementComponent inicializado');
   }
 }
