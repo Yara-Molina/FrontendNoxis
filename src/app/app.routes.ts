@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { LoginComponent } from './presenter/pages/login/login.component';
 import { DashboardComponent } from './presenter/pages/dashboard/dashboard.component';
 import { AdminDashboardComponent } from './presenter/pages/admin-dashboard/admin-dashboard.component';
+import { SingUpComponent } from './presenter/pages/sing-up/sing-up.component';
 
 export const routes: Routes = [
     { path: 'login', component: LoginComponent },
@@ -14,6 +15,7 @@ export const routes: Routes = [
       component:AdminDashboardComponent,
     },
     
-    { path: '', redirectTo: 'login', pathMatch: 'full' }, // Redirige a login por defecto
-    { path: '**', redirectTo: 'login' } // Ruta comodín para cualquier ruta inexistente
+    { path: '', redirectTo: 'signup', pathMatch: 'full' }, // Redirige a login por defecto
+    { path: '**', redirectTo: 'signup' }, // Ruta comodín para cualquier ruta inexistente
+    { path: 'signup', component: SingUpComponent },
   ];
