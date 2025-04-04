@@ -1,6 +1,4 @@
-export interface Notification {
-  id: number;
-  type: 'low' | 'medium' | 'high'; 
-  message: string;
-  timestamp: Date;
+export interface SensorMessage {
+  name: string;
+  data: { [key: string]: number };
 }

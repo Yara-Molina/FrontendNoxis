@@ -1,31 +1,31 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common'; // Importa CommonModule
-import { Notification } from '../../../domain/interfaces/notification.interface';
-import { MatCardModule } from '@angular/material/card';
+import { Component, OnInit } from '@angular/core';
+import { WebSocketService } from '../../../service/websocket.service';
+import { SensorMessage } from '../../../domain/interfaces/notification.interface';
+import Swal from 'sweetalert2';
 
 @Component({
-  selector: 'app-notifications',
   standalone: true,
-  imports: [CommonModule,
-    MatCardModule
-  ],
-  templateUrl: './notifications.component.html',
-  styleUrl: './notifications.component.scss'
+  selector: 'app-monitor',
+  template: ``
 })
-export class NotificationsComponent {
-  title: string = 'Notificaciones';
-  notifications: Notification[] = [
-    { id: 1, type: 'low', message: 'Nivel bajo de gas detectado.', timestamp: new Date() },
-    { id: 2, type: 'medium', message: 'Nivel medio de gas detectado.', timestamp: new Date() },
-    { id: 3, type: 'high', message: '¡Nivel alto de gas detectado! Precaución.', timestamp: new Date() },
-    { id: 4, type: 'high', message: '¡Flama detectada! Actúe inmediatamente.', timestamp: new Date() }
-  ];
+export class NotificationsComponent implements OnInit {
+  constructor(private wsService: WebSocketService) {}
 
-  getNotificationsByType(type: 'low' | 'medium' | 'high'): Notification[] {
-    return this.notifications.filter(notification => notification.type === type);
+  ngOnInit(): void {
+    this.wsService.getMessages().subscribe((message: SensorMessage) => {
+      const { name, data } = message;
+
+      const dataValues = Object.entries(data)
+        .map(([k, v]) => `${k}: ${v}`)
+        .join('<br>');
+
+      Swal.fire({
+        icon: 'warning',
+        title: `⚠️ Alerta del sensor ${name}`,
+        html: `Lecturas peligrosas detectadas:<br>${dataValues}`,
+        confirmButtonText: 'Entendido',
+        timer: 7000
+      });
+    });
   }
-
-  
-
-
 }

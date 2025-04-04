@@ -1,0 +1,25 @@
+<h2 mat-dialog-title>Ingresar código de kit</h2>
+
+<mat-dialog-content>
+  <!-- Campo de entrada para el código del kit -->
+  <mat-form-field appearance="fill" style="width: 100%;">
+    <mat-label>Código</mat-label>
+    <input matInput [(ngModel)]="kitCode">
+  </mat-form-field>
+
+  <!-- Spinner de carga mientras procesamos la solicitud -->
+  <div *ngIf="loading" class="spinner-container">
+    <mat-spinner diameter="30"></mat-spinner>
+  </div>
+
+  <!-- Mensaje de resultado (éxito o error) -->
+  <p [ngStyle]="{ color: error ? 'red' : 'green' }" *ngIf="resultMessage">
+    {{ resultMessage }}
+  </p>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <!-- Botones de cancelar y aceptar -->
+  <button mat-button (click)="onCancel()">Cancelar</button>
+  <button mat-raised-button color="primary" [disabled]="!kitCode || loading" (click)="onSubmit()">Aceptar</button>
+</mat-dialog-actions>

@@ -24,6 +24,9 @@ export class LoginComponent {
         // Si el email contiene "@admin", redirige a homeAdmin
         if (this.email.includes('@admin')) {
           this.router.navigate(['/admin-dashboard']);
+        }else{
+          this.router.navigate(['/dashboard']);
+
         }
       },
       (error) => {
