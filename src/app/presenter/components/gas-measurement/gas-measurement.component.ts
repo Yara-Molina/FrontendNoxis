@@ -1,7 +1,7 @@
 import { Component, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { BaseChartComponent } from '../base/base.component';
 import { WebSocketService } from '../../../service/websocket.service';
+import { Chart } from 'chart.js';
 
 @Component({
   selector: 'app-gas-measurement',
@@ -95,31 +95,56 @@ export class GasMeasurementComponent implements AfterViewInit {
     });
   }
 
-  private updateChart() {
-    if (!this.chart) return;
-
-    Object.keys(this.sensorData).forEach((sensorName) => {
-      const sensor = this.sensorData[sensorName];
-
-      Object.keys(sensor).forEach((key) => {
-        const label = key === 'value' ? sensorName : `${sensorName} - ${key}`;
-        const existingDataset = this.chart!.data.datasets.find(ds => ds.label === label);
-
-        if (existingDataset) {
-          existingDataset.data = sensor[key];
-        } else {
-          this.chart!.data.datasets.push({
-            label,
-            data: sensor[key],
-            borderColor: this.getRandomColor(),
-            fill: false
-          });
-        }
-      });
-    });
-
-    this.chart.update();
-  }
+   private updateChart() {
+     if (!this.chart) return;
+     this.chart.data.datasets[0].data = this.sensorData['Calidad Aire MQ-135'];
+     this.chart.data.datasets[1].data = this.sensorData['BME-680'];
+ 
+     // Recorremos todos los sensores y actualizamos los datasets
+     Object.keys(this.sensorData).forEach((sensorName) => {
+       const sensor = this.sensorData[sensorName];
+ 
+       // Si el sensor es BME-680, actualizamos los datasets de cada clave de ese sensor
+       if (sensorName === 'BME-680') {
+         Object.keys(sensor).forEach((key) => {
+           const existingDataset = this.chart?.data.datasets.find((dataset) => dataset.label === `${sensorName} - ${key}`);
+ 
+           if (existingDataset) {
+             // Si el dataset ya existe, solo agregamos el nuevo dato
+             existingDataset.data = sensor[key];
+           } else {
+             // Si no existe, lo creamos
+             this.chart?.data.datasets.push({
+               label: `${sensorName} - ${key}`,
+               data: sensor[key],
+               borderColor: this.getRandomColor(),
+               fill: false
+             });
+           }
+         });
+       } else {
+         // Para otros sensores (como MQ-135), solo agregamos un único dataset
+         const existingDataset = this.chart?.data.datasets.find((dataset) => dataset.label === sensorName);
+ 
+         if (existingDataset) {
+           // Si ya existe, actualizamos los datos
+           existingDataset.data = sensor;
+         } else {
+           // Si no existe, lo creamos
+           this.chart?.data.datasets.push({
+             label: sensorName,
+             data: sensor,
+             borderColor: this.getRandomColor(),
+             fill: false
+           });
+         }
+       }
+     });
+ 
+     // Finalmente, actualizamos el gráfico
+     this.chart.update();
+   }
+ 
 
   private getRandomColor() {
     const letters = '0123456789ABCDEF';

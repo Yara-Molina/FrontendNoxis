@@ -8,7 +8,7 @@ import { catchError } from 'rxjs/operators';
 })
 export class KitService {
   private apiUrl = 'http://localhost:8080/kits';
-  private tokenKey = 'authToken';
+  private tokenKey = 'token';
 
   constructor(private http: HttpClient) {}
 
@@ -18,7 +18,7 @@ export class KitService {
   }
 
   private getToken(): string | null {
-    return sessionStorage.getItem(this.tokenKey);
+    return localStorage.getItem(this.tokenKey); // antes era sessionStorage
   }
 
   createKit(kitData: any): Observable<any> {
@@ -44,7 +44,15 @@ export class KitService {
       .get(`${this.apiUrl}/inactives`, { headers: this.getAuthHeaders() })
       .pipe(catchError(this.handleError));
   }
-
+  redeemKit(userId: number, kitCode: string): Observable<any> {
+    const body = { clave: kitCode };
+    return this.http.post(`${this.apiUrl}/${userId}`, body, {
+      headers: this.getAuthHeaders()
+    }).pipe(
+      catchError(this.handleError)
+    );
+  }
+  
   private handleError(error: any): Observable<never> {
     console.error('Error en KitService:', error);
     return throwError(error);

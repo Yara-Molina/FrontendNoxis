@@ -15,7 +15,7 @@ export const routes: Routes = [
       component:AdminDashboardComponent,
     },
     
-    { path: '', redirectTo: 'signup', pathMatch: 'full' }, // Redirige a login por defecto
-    { path: '**', redirectTo: 'signup' }, // Ruta comodín para cualquier ruta inexistente
+    { path: '', redirectTo: 'signup', pathMatch: 'full' },
+    { path: '**', redirectTo: 'signup' }, 
     { path: 'signup', component: SingUpComponent },
   ];
