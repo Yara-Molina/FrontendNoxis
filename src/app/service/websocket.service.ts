@@ -13,7 +13,7 @@ export class WebSocketService {
 
   constructor() {
     if (isBrowser) {
-      this.socket = new WebSocket('ws://localhost:8081/ws');
+      this.socket = new WebSocket('ws://backnoxis.upprojects.online:8081/ws');
 
       this.socket.onmessage = (event) => {
         try {

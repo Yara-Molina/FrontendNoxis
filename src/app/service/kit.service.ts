@@ -7,7 +7,7 @@ import { catchError } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class KitService {
-  private apiUrl = 'http://localhost:8080/kits';
+  private apiUrl = 'https://backnoxis.upprojects.online:8080/kits';
   private tokenKey = 'token';
 
   constructor(private http: HttpClient) {}
