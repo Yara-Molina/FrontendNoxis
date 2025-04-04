@@ -1,0 +1,18 @@
+<section class="dashboard-container">
+  @for (card of dashboardData; track card.id) {
+    <app-card [title]="card.title">
+      @if (card.title === 'Monitoreo del Ambiente') {
+        <app-environment-monitoring></app-environment-monitoring>
+      }
+      @if (card.title === 'Prevención de Incendios') {
+        <app-fire-prevention></app-fire-prevention>
+      }
+      @if (card.title === 'Gases Tóxicos') {
+        <app-gas-measurement></app-gas-measurement>
+      }
+      @if (card.type === 'notification') {
+        <app-notifications></app-notifications>
+      }
+    </app-card>
+  }
+</section>
