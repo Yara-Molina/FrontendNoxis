@@ -2,4 +2,12 @@
     <div class="Divlogo">
         <img src="assets/images/noxis.png" alt="logo"/>   
     </div>
+    <button 
+  *ngIf="showButton()" 
+  mat-raised-button 
+  color="primary" 
+  (click)="openKitCodeDialog()"
+  class="bottom-left-button">
+  Ingresar Código de Kit
+</button>
 </header>

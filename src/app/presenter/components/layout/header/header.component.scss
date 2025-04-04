@@ -21,4 +21,9 @@ header {
  }
 
 
-
+ .bottom-left-button {
+  position: fixed;
+  top: 25px;
+  right: 20px;
+  z-index: 1000; // Para asegurar que esté por encima de otros elementos
+}
