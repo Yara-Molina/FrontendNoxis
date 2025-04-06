@@ -14,7 +14,10 @@ export class GasMeasurementComponent implements AfterViewInit {
   @ViewChild('chartCanvas') chartCanvas?: ElementRef<HTMLCanvasElement>;
   private chart?: Chart;
 
-  private sensorData: { [key: string]: any } = {};
+  private sensorData: { [key: string]: any } = {
+    'Carbono MQ-7': { value: [] },
+    'Carbono CJMCU-811': { CO2: [], TVOC: [] }
+  };
 
   constructor(private webSocketService: WebSocketService) { }
 
@@ -23,7 +26,7 @@ export class GasMeasurementComponent implements AfterViewInit {
       this.createChart();
       // Dentro de ngAfterViewInit
       this.webSocketService.getMessages().subscribe((data) => {
-        const { name, data: sensorData } = data;
+        const { name, data: sensorData }: { name: string; data: { CO2?: number; TVOC?: number; [key: string]: any } } = data;
 
         if (!name || !sensorData) {
           console.warn('Datos inválidos recibidos:', data);
@@ -32,27 +35,28 @@ export class GasMeasurementComponent implements AfterViewInit {
 
         switch (name) {
           case 'Carbono MQ-7':
-            // Valor único
+            // Agregar el valor del sensor MQ-7
             if (!this.sensorData[name]) this.sensorData[name] = { value: [] };
-            this.sensorData[name].value.push(sensorData);
+            this.sensorData[name].value.push(sensorData['data']);
             if (this.sensorData[name].value.length > 10) {
-              this.sensorData[name].value.shift();
+              this.sensorData[name].value.shift(); // Limitar a los últimos 10 valores
             }
             break;
           case 'Carbono CJMCU-811':
-            if (!this.sensorData[name]) this.sensorData[name] = {};
-            Object.keys(sensorData).forEach((key) => {
-              if (!this.sensorData[name][key]) this.sensorData[name][key] = [];
-              this.sensorData[name][key].push(sensorData[key]);
-              if (this.sensorData[name][key].length > 10) {
-                this.sensorData[name][key].shift();
-              }
-            });
+            // Agregar los valores del sensor CJMCU-811
+            if (!this.sensorData[name]) this.sensorData[name] = { CO2: [], TVOC: [] };
+            this.sensorData[name].CO2.push(sensorData['data'].CO2);
+            this.sensorData[name].TVOC.push(sensorData['data'].TVOC);
+            if (this.sensorData[name].CO2.length > 10) {
+              this.sensorData[name].CO2.shift(); // Limitar a los últimos 10 valores de CO2
+            }
+            if (this.sensorData[name].TVOC.length > 10) {
+              this.sensorData[name].TVOC.shift(); // Limitar a los últimos 10 valores de TVOC
+            }
             break;
-
           default:
-            return; // Ignorar sensores no pertenecientes
-        }
+            break; // Ignorar otros sensores
+          }
         this.updateChart();
       });
     }, 0);
@@ -67,7 +71,7 @@ export class GasMeasurementComponent implements AfterViewInit {
     this.chart = new Chart(ctx, {
       type: 'line',
       data: {
-        labels: Array(10).fill(''),
+        labels: Array(10).fill(''), // Usar etiquetas vacías (puedes personalizarlas si lo deseas)
         datasets: []
       },
       options: {
@@ -95,56 +99,43 @@ export class GasMeasurementComponent implements AfterViewInit {
     });
   }
 
-   private updateChart() {
-     if (!this.chart) return;
-     this.chart.data.datasets[0].data = this.sensorData['Calidad Aire MQ-135'];
-     this.chart.data.datasets[1].data = this.sensorData['BME-680'];
- 
-     // Recorremos todos los sensores y actualizamos los datasets
-     Object.keys(this.sensorData).forEach((sensorName) => {
-       const sensor = this.sensorData[sensorName];
- 
-       // Si el sensor es BME-680, actualizamos los datasets de cada clave de ese sensor
-       if (sensorName === 'BME-680') {
-         Object.keys(sensor).forEach((key) => {
-           const existingDataset = this.chart?.data.datasets.find((dataset) => dataset.label === `${sensorName} - ${key}`);
- 
-           if (existingDataset) {
-             // Si el dataset ya existe, solo agregamos el nuevo dato
-             existingDataset.data = sensor[key];
-           } else {
-             // Si no existe, lo creamos
-             this.chart?.data.datasets.push({
-               label: `${sensorName} - ${key}`,
-               data: sensor[key],
-               borderColor: this.getRandomColor(),
-               fill: false
-             });
-           }
-         });
-       } else {
-         // Para otros sensores (como MQ-135), solo agregamos un único dataset
-         const existingDataset = this.chart?.data.datasets.find((dataset) => dataset.label === sensorName);
- 
-         if (existingDataset) {
-           // Si ya existe, actualizamos los datos
-           existingDataset.data = sensor;
-         } else {
-           // Si no existe, lo creamos
-           this.chart?.data.datasets.push({
-             label: sensorName,
-             data: sensor,
-             borderColor: this.getRandomColor(),
-             fill: false
-           });
-         }
-       }
-     });
- 
-     // Finalmente, actualizamos el gráfico
-     this.chart.update();
-   }
- 
+  private updateChart() {
+    if (!this.chart) return;
+
+    // Limpiar los datasets antes de agregar nuevos datos
+    this.chart.data.datasets = [];
+
+    // Actualizar los datasets de los sensores
+    if (this.sensorData['Carbono MQ-7']) {
+      const mq7Dataset = {
+        label: 'Carbono MQ-7',
+        data: this.sensorData['Carbono MQ-7'].value,
+        borderColor: this.getRandomColor(),
+        fill: false
+      };
+      this.chart.data.datasets.push(mq7Dataset);
+    }
+
+    if (this.sensorData['Carbono CJMCU-811']) {
+      // Agregar CO2 y TVOC como datasets separados
+      const co2Dataset = {
+        label: 'CO2 - Carbono CJMCU-811',
+        data: this.sensorData['Carbono CJMCU-811'].CO2,
+        borderColor: this.getRandomColor(),
+        fill: false
+      };
+      const tvocDataset = {
+        label: 'TVOC - Carbono CJMCU-811',
+        data: this.sensorData['Carbono CJMCU-811'].TVOC,
+        borderColor: this.getRandomColor(),
+        fill: false
+      };
+      this.chart.data.datasets.push(co2Dataset, tvocDataset);
+    }
+
+    // Finalmente, actualizamos el gráfico
+    this.chart.update();
+  }
 
   private getRandomColor() {
     const letters = '0123456789ABCDEF';
