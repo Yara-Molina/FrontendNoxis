@@ -15,14 +15,22 @@ export class NotificationsComponent implements OnInit {
     this.wsService.getMessages().subscribe((message: SensorMessage) => {
       const { name, data } = message;
 
-      const dataValues = Object.entries(data)
-        .map(([k, v]) => `${k}: ${v}`)
-        .join('<br>');
+      const formatData = (data: any): string => {
+        if (typeof data === 'object' && !Array.isArray(data)) {
+          return Object.entries(data)
+            .map(([key, value]) => `${key}: ${formatData(value)}`)
+            .join('<br>');
+        } else {
+          return data;
+        }
+      };
+
+      const dataValues = formatData(data);
 
       Swal.fire({
         icon: 'warning',
         title: `⚠️ Alerta del sensor ${name}`,
-        html: `Lecturas peligrosas detectadas:<br>${dataValues}`,
+        html: `Lecturas peligrosas detectadas:<br>${dataValues}`, // Mostrar datos con formato estético
         confirmButtonText: 'Entendido',
         timer: 7000
       });

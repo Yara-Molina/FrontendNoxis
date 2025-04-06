@@ -30,12 +30,14 @@ export class FirePreventionComponent implements AfterViewInit, OnInit, OnDestroy
 
     this.sensorSubscription = this.webSocketService.getMessages().subscribe({
       next: (data) => {
-        const { name, data: value } = data;
+        const { name, data: payload } = data;
+        const sensorData = payload?.['data'] as number;
 
         switch (name) {
           case 'Metano MQ-4':
           case 'Gas Natural MQ-5':
-            this.updateChartData(name, Number(value));
+            // Se actualiza con el valor recibido
+            this.updateChartData(name, sensorData);
             break;
 
           default:
@@ -98,8 +100,10 @@ export class FirePreventionComponent implements AfterViewInit, OnInit, OnDestroy
 
     console.log(`Actualizando datos del sensor ${sensor} con valor ${value}`);
 
+    // Se actualiza el valor del sensor en la estructura de datos
     this.sensorData[sensor] = value;
 
+    // Actualizamos los datos del gráfico
     const metanoValue = this.sensorData['Metano MQ-4'];
     const gasValue = this.sensorData['Gas Natural MQ-5'];
 
@@ -108,6 +112,7 @@ export class FirePreventionComponent implements AfterViewInit, OnInit, OnDestroy
       return;
     }
 
+    // Actualizamos los datos en el gráfico
     this.chart.data.datasets[0].data = [metanoValue, gasValue];
     this.chart.update();
   }

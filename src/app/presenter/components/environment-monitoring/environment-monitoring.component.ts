@@ -25,15 +25,17 @@ export class EnvironmentMonitoringComponent implements AfterViewInit {
       this.createChart();
       // Dentro de ngAfterViewInit
       this.webSocketService.getMessages().subscribe((data) => {
-        const { name, data: sensorData } = data;
-
-        if (!name || !sensorData) {
+        const { name, data: payload } = data;
+        const sensorData = payload?.['data'] as { [key: string]: number } | number;
+      
+        if (!name || sensorData === undefined) {
           console.warn('Datos inválidos recibidos:', data);
           return;
         }
-
+      
         switch (name) {
           case 'BME-680':
+            if (typeof sensorData !== 'object') return;
             if (!this.sensorData[name]) this.sensorData[name] = {};
             Object.keys(sensorData).forEach((key) => {
               if (!this.sensorData[name][key]) this.sensorData[name][key] = [];
@@ -43,28 +45,28 @@ export class EnvironmentMonitoringComponent implements AfterViewInit {
               }
             });
             break;
-
-          case 'Calidad Aire MQ-135':
-            if (!this.sensorData[name]) this.sensorData[name] = [];
-            this.sensorData[name].push(sensorData);
-            if (this.sensorData[name].length > 10) {
-              this.sensorData[name].shift();
-            }
-            break;
-
-            case 'Hidrogeno MQ-136':
+      
+            case 'Calidad Aire MQ-135':
+              if (typeof sensorData !== 'number') return;
               if (!this.sensorData[name]) this.sensorData[name] = [];
               this.sensorData[name].push(sensorData);
               if (this.sensorData[name].length > 10) {
                 this.sensorData[name].shift();
               }
               break;
-
+          case 'Hidrogeno MQ-136':
+            if (typeof sensorData !== 'number') return;
+            if (!this.sensorData[name]) this.sensorData[name] = [];
+            this.sensorData[name].push(sensorData);
+            if (this.sensorData[name].length > 10) {
+              this.sensorData[name].shift();
+            }
+            break;
+      
           default:
-            // Ignorar sensores no pertenecientes a esta vista
-            return;
+            break; // Ignorar otros sensores
         }
-
+      
         this.updateChart();
       });
     }, 0);

@@ -8,7 +8,7 @@ import { Router } from '@angular/router';
   providedIn: 'root',
 })
 export class UserService {
-  private apiUrl = 'https://backnoxis.upprojects.online:8080/user';
+  private apiUrl = 'http://localhost:8080/user';
   private tokenKey = 'token';
 
   constructor(private http: HttpClient, private router: Router) {
@@ -23,7 +23,12 @@ export class UserService {
 
   // Registro de usuario
   register(userData: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/register`, userData);
+    return this.http.post(`${this.apiUrl}/register`, userData).pipe(
+      catchError((error) => {
+        console.error('Error en el registro:', error);
+        return throwError(() => new Error('Error al registrar el usuario. Verifica la conexión con el servidor.'));
+      })
+    );
   }
 
   // Inicio de sesión
