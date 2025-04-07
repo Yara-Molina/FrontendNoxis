@@ -15,7 +15,7 @@
   .AmbasColumnas {
     width: 1000px;
     display: flex;
-    background-color: #ffffff;
+    background-color: #223A59;
     margin-top: 30px;
     border-radius: 15px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
@@ -38,19 +38,19 @@
   /* Título */
   #tituloSesion {
     font-size: 28px;
-    color: #333333;
-    text-align: center;
-    margin-bottom: 20px;
+    color: #e4edfa;
+    text-align:center;
+    padding-right:50px;
   }
   
   #inicioText, #tipoUsuarioText, #passwordText, #passwordTextConfirm {
-    color: #555555;
+    color: #223A59;
     font-size: 14px;
     margin-bottom: 8px;
   }
   
   input, select {
-    width: 100%;
+    width: 90%;
     height: 45px;
     border-radius: 5px;
     padding: 0 10px;
@@ -58,6 +58,7 @@
     font-size: 16px;
     margin-bottom: 20px;
     transition: border-color 0.3s ease;
+    align-items: center;
   }
   
   input:focus, select:focus {
@@ -66,14 +67,14 @@
   }
   
   input:hover, select:hover {
-    background-color: #f7f7f7;
+    background-color: #e4edfa;
   }
   
   #entrarbtn {
     width: 100%;
     height: 50px;
-    background-color: #2b4c32;
-    color: white;
+    background-color: #abbed7; // Azul oscuro;
+    color: #223A59;
     font-size: 18px;
     border: none;
     border-radius: 25px;
@@ -89,14 +90,14 @@
   
   #pregunta {
     font-size: 14px;
-    color: #555555;
+    color: #e4edfa;
     text-align: center;
   }
   
   #iniciarSesion {
     font-weight: bold;
     font-size: 14px;
-    color: #546e7a;
+    color: #a3c0ea;
     background-color: transparent;
     border: none;
     cursor: pointer;
@@ -105,7 +106,7 @@
   
   #iniciarSesion:hover {
     transform: scale(1.1);
-    color: #1976d2;
+    color: #d6eaff;
   }
   
   @media (max-width: 768px) {

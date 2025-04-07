@@ -7,7 +7,7 @@ import { catchError } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class KitService {
-  private apiUrl = 'http://localhost:8000/kits';
+  private apiUrl = 'http://52.70.63.70:8080/kits';
   private tokenKey = 'token';
 
   constructor(private http: HttpClient) {}

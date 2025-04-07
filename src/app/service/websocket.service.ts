@@ -2,7 +2,7 @@ import { Injectable, OnDestroy } from '@angular/core';
 import { Observable, Subject, BehaviorSubject } from 'rxjs';
 import { SensorMessage } from '../domain/interfaces/notification.interface';
 
-const WS_URL = 'ws://localhost:8081/ws'; // Backend WebSocket URL
+const WS_URL = 'ws://52.70.63.70:8081/ws'; // Backend WebSocket URL
 
 @Injectable({
   providedIn: 'root'

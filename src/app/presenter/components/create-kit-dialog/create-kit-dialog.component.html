@@ -1,19 +1,19 @@
-<h2 mat-dialog-title>Crear un Nuevo Kit</h2>
-<div mat-dialog-content>
+<h2 mat-dialog-title class="dialog-title">Crear un Nuevo Kit</h2>
+<div mat-dialog-content class="dialog-content">
   <form>
-    <mat-form-field>
+    <mat-form-field appearance="fill" style="width: 100%;">
       <mat-label>Nombre de Usuario</mat-label>
       <input matInput [(ngModel)]="newKit.username" name="username" required>
     </mat-form-field>
 
-    <mat-form-field>
+    <mat-form-field appearance="fill" style="width: 100%;">
       <mat-label>Sensores (separados por comas)</mat-label>
       <input matInput [(ngModel)]="newKit.sensoresInput" name="sensoresInput" placeholder="Ejemplo: MQ-7, MQ-135, BME680" required>
     </mat-form-field>
   </form>
 </div>
 
-<div mat-dialog-actions>
-  <button mat-button (click)="onCancel()">Cancelar</button>
-  <button mat-button (click)="onCreate()" cdkFocusInitial>Crear</button>
+<div mat-dialog-actions class="dialog-actions">
+  <button mat-button class="cancel-button" (click)="onCancel()">Cancelar</button>
+  <button mat-raised-button class="submit-button" cdkFocusInitial (click)="onCreate()">Crear</button>
 </div>

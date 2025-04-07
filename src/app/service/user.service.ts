@@ -8,7 +8,7 @@ import { Router } from '@angular/router';
   providedIn: 'root',
 })
 export class UserService {
-  private apiUrl = 'http://localhost:8080/user';
+  private apiUrl = 'http://52.70.63.70:8080/user';
   private tokenKey = 'token';
 
   constructor(private http: HttpClient, private router: Router) {
